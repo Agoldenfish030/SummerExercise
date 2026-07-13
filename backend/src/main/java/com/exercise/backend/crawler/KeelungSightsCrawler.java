@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class KeelungSightsCrawler {
@@ -50,6 +51,7 @@ public class KeelungSightsCrawler {
     }
 
     public Sight[] getItems(String keelungSights){
+        sights = null;
         try{
             int count;
             for(count = 0; count < 7; count++){
@@ -66,9 +68,9 @@ public class KeelungSightsCrawler {
                     break;
                 }
             }
-            if(count == 7) throw new Exception("Not found the district.");
-        }catch(Exception e) {
-            System.err.println("Exception in KeelungSightsCrawler getItems: " + e);
+            if(count == 7) throw new NoSuchElementException("Not found the district.");
+        }catch(NoSuchElementException e) {
+            System.err.println("NoSuchElementException in KeelungSightsCrawler getItems: " + e);
         }
 
         return sights;
