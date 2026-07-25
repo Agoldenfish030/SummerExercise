@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function SightCard({ sightName }) {
+export default function SightCard({ zone }) {
   const test = {
     address: "基隆市七堵區光明路23號",
     category: "歷史古蹟",
@@ -13,19 +13,19 @@ export default function SightCard({ sightName }) {
   };
 
   let name = "";
-  if (sightName === "七堵區") {
+  if (zone === "七堵區") {
     name = "qidu";
-  } else if (sightName === "中山區") {
+  } else if (zone === "中山區") {
     name = "zhongshan";
-  } else if (sightName === "中正區") {
+  } else if (zone === "中正區") {
     name = "zhongzheng";
-  } else if (sightName === "仁愛區") {
+  } else if (zone === "仁愛區") {
     name = "renai";
-  } else if (sightName === "安樂區") {
+  } else if (zone === "安樂區") {
     name = "anle";
-  } else if (sightName === "信義區") {
+  } else if (zone === "信義區") {
     name = "xinyi";
-  } else if (sightName === "暖暖區") {
+  } else if (zone === "暖暖區") {
     name = "nuannuan";
   } else {
     return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;

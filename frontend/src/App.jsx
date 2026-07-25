@@ -7,11 +7,11 @@ import SightCard from "./components/RequestSight/SightCard";
 function App() {
   const [selectedSights, setSelectedSights] = useState([]);
 
-  const handleSelectedSights = (sightName) => {
-    if (selectedSights.includes(sightName)) {
-      setSelectedSights(selectedSights.filter((sight) => sight !== sightName));
+  const handleSelectedZones = (zone) => {
+    if (selectedSights.includes(zone)) {
+      setSelectedSights(selectedSights.filter((sight) => sight !== zone));
     } else {
-      setSelectedSights([...selectedSights, sightName]);
+      setSelectedSights([...selectedSights, zone]);
     }
   };
 
@@ -28,14 +28,14 @@ function App() {
           "暖暖區",
         ].map((name) => (
           <SightButton
-            sightName={name}
-            setSelected={() => handleSelectedSights(name)}
+            zone={name}
+            setSelected={() => handleSelectedZones(name)}
           />
         ))}
       </div>
       <div className="grid w-full grid-cols-3 p-1 max-lg:grid-cols-1">
         {selectedSights.map((name) => (
-          <SightCard sightName={name} />
+          <SightCard zone={name} />
         ))}
       </div>
     </>

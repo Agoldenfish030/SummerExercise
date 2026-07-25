@@ -1,5 +1,6 @@
 package com.exercise.backend.crawler;
 
+import com.exercise.backend.zoneName.ZoneConstant;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,9 +10,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class KeelungSightsCrawler {
-    private final String SIGHTS_URL = "https://www.travelking.com.tw";
+    private final String SIGHTS_URL = "https://www.travelking.com.tw/";
     private final String SIGHTS_BOX_X_PATH = "/html/body/div[@id='wrapper']/div[@id='content']/div/div[@id='guide-point']/div[@class='box']";
-    private final String[] KEELUNG_SIGHTS_LIST = {"qidu", "zhongshan", "zhongzheng", "renai", "anle", "xinyi", "nuannuan"};
     private final String SIGHT_DETAILS_X_PATH = "/html/body/div/div[@id='content']/div[@class='size']/div[@class='list_detail news_large']/div[1]/div[1]/div[1]";
     private final int SIGHT_NAME_INDEX = 0;
     private final int PHOTO_URL_INDEX = 2;
@@ -23,7 +23,7 @@ public class KeelungSightsCrawler {
 
     public KeelungSightsCrawler(){
         try{
-            Document webDoc = Jsoup.connect(SIGHTS_URL + "/tourguide/taiwan/keelungcity/").get();
+            Document webDoc = Jsoup.connect(SIGHTS_URL + "tourguide/taiwan/keelungcity/").get();
             sightsBox = webDoc.selectXpath(SIGHTS_BOX_X_PATH).first();
         }catch(IOException e){
             System.err.println("IOException in KeelungSightsCrawler constructor: " + e);
@@ -55,14 +55,14 @@ public class KeelungSightsCrawler {
         try{
             int count;
             for(count = 0; count < 7; count++){
-                if(Objects.equals(keelungSights, KEELUNG_SIGHTS_LIST[count])){
+                if(Objects.equals(keelungSights, ZoneConstant.KEELUNG_ZONES_ENGLISH[count])){
                     ArrayList<Element> districtSights = sightsBox.getElementsByTag("ul")
                             .get(count+1)
                             .getElementsByTag("li");
                     sights = new Sight[districtSights.size()];
                     String zone = sightsBox.getElementsByTag("h4").get(count).text();
                     for(int sightsCount = 0; sightsCount < districtSights.size(); sightsCount++){
-                        String sightUrl = SIGHTS_URL + districtSights.get(sightsCount).getElementsByTag("a").attr("href");
+                        String sightUrl = districtSights.get(sightsCount).getElementsByTag("a").attr("href").replace("../../", SIGHTS_URL+"tourguide/");
                         addSight(sightsCount, zone, sightUrl);
                     }
                     break;
