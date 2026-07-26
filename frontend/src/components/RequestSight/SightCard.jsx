@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function SightCard({ zone }) {
+export default async function SightCard({ zone }) {
   let name = "";
   if (zone === "七堵區") {
     name = "qidu";
@@ -19,12 +19,14 @@ export default function SightCard({ zone }) {
   } else {
     return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
   }
-  let data;
-  fetch("http://localhost:8080/api/sights/" + name)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-    });
+  const res = await fetch(
+    "https://summerexercise-production.up.railway.app/api/sights/" + name,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+  const data = await res.json();
 
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => {

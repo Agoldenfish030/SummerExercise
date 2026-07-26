@@ -4,7 +4,6 @@ import com.exercise.backend.crawler.Sight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
@@ -15,10 +14,10 @@ public class SightController {
     private KeelungSightsService service;
 
     @GetMapping("/{zone}")
-    public ResponseEntity<List<Sight>> getSightsControl(@PathVariable("zone") String zone) throws FileNotFoundException {
+    public ResponseEntity<List<Sight>> getSightsControl(@PathVariable("zone") String zone) {
         List<Sight> sights = service.getSightService(zone);
         if(sights == null){
-            throw new FileNotFoundException();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(sights);
     }
