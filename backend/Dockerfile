@@ -1,6 +1,6 @@
 FROM maven:3.9.16-eclipse-temurin-17 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
+COPY backend/src /home/app/src
+COPY backend/pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package
 
 FROM amazoncorretto:17-jdk
