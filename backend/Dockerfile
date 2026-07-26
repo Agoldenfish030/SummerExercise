@@ -1,6 +1,6 @@
 FROM maven:4.0.0-rc-4-amazoncorretto AS build
-COPY backend/src /home/app/src
-COPY backend/pom.xml /home/app
+COPY src /home/app/src
+COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package -DskipTests
 
 FROM amazoncorretto:17-jdk
