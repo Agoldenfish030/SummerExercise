@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/sights")
+@RequestMapping(path = "/api/sights")
 public class SightController {
 
     @Autowired

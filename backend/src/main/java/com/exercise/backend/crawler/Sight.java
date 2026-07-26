@@ -1,5 +1,8 @@
 package com.exercise.backend.crawler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "sights")
 public class Sight {
     private String sightName;
     private String zone;
