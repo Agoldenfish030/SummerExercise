@@ -42,7 +42,7 @@ public class KeelungSightsCrawler {
                     .getElementsByTag("span").first()
                     .getElementsByTag("span").first()
                     .getElementsByTag("strong").first().text());
-            newSight.setPhotoURL(sightDetailsBox.getElementsByTag("meta").get(PHOTO_URL_INDEX).attr("content"));
+            newSight.setPhotoURL(sightDetailsBox.getElementsByTag("meta").get(PHOTO_URL_INDEX).attr("content").replace("../../", SIGHTS_URL));
             newSight.setAddress(sightDetailsBox.getElementsByTag("meta").get(ADDRESS_INDEX).attr("content"));
             newSight.setDescription(sightDetailsBox.getElementsByTag("meta").get(DESCRIPTION_INDEX).attr("content"));
         }catch(IOException | NullPointerException e){
