@@ -1,4 +1,4 @@
-FROM maven:3.9.16-eclipse-temurin-17 AS build
+FROM maven:4.0.0-rc-4-amazoncorretto AS build
 COPY backend/src /home/app/src
 COPY backend/pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package -DskipTests
