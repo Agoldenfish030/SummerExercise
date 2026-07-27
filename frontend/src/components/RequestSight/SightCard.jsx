@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 async function getData({ name }) {
   try {
     const res = await fetch("/api/sights/" + name);
+    if (!res.ok) {
+      console.error("mongodb資料獲取失敗。");
+    }
     const data = await res.json();
     return data;
   } catch (error) {
@@ -16,6 +19,8 @@ function SingleCard({ sight }) {
   const handleOpen = () => {
     setIsOpen(!isOpen);
   };
+  let haveImg = true;
+  if (sight.photoURL === "") haveImg = false;
 
   return (
     <div className="p-2">
@@ -28,6 +33,8 @@ function SingleCard({ sight }) {
           <p className="text-lg">
             <br />
             分類：{sight.category}
+            <br />
+            地區：{sight.zone}
             <br />
             <br />
           </p>
@@ -43,7 +50,7 @@ function SingleCard({ sight }) {
             }`}
           >
             <div className="overflow-hidden">
-              <img src={sight.photoURL} />
+              {haveImg && <img src={sight.photoURL} alt="該區景點照片" />}
               <p className="text-lg">
                 {sight.description}
                 <br />
