@@ -79,9 +79,9 @@ export default function SightCard({ zone }) {
     return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
   }
 
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   useEffect(() => {
-    getData(name).then((resData) => {
+    getData({ name }).then((resData) => {
       setData(resData || []);
     });
   }, []);
