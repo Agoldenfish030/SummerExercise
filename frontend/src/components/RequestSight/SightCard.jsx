@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 async function getData({ name }) {
   try {
     const res = await fetch(
-      "https://backend-mavenmongodb-production.up.railway.app/api/sights" +
+      "https://backend-mavenmongodb-production.up.railway.app/api/sights/" +
         name,
     );
     const data = await res.json();
     return data;
   } catch (error) {
     console.error("Fetch error: " + error);
+    return [];
   }
 }
 
@@ -58,7 +59,7 @@ function SingleCard({ sight }) {
   );
 }
 
-export default async function SightCard({ zone }) {
+export default function SightCard({ zone }) {
   let name = "";
   if (zone === "七堵區") {
     name = "qidu";
@@ -77,7 +78,13 @@ export default async function SightCard({ zone }) {
   } else {
     return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
   }
-  const data = await getData(name);
+
+  const [data, setData] = useState();
+  useEffect(() => {
+    getData(name).then((resData) => {
+      setData(resData || []);
+    });
+  }, []);
 
   return (
     <>
