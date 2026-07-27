@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 
 async function getData({ name }) {
   try {
-    const res = await fetch(
-      "https://backend-mavenmongodb-production.up.railway.app/api/sights/" +
-        name,
-    );
+    const res = await fetch("/api/sights/" + name);
     const data = await res.json();
     return data;
   } catch (error) {
