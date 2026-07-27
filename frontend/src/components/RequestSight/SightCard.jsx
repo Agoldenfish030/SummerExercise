@@ -57,31 +57,27 @@ function SingleCard({ sight }) {
 }
 
 export default function SightCard({ zone }) {
-  let name = "";
-  if (zone === "七堵區") {
-    name = "qidu";
-  } else if (zone === "中山區") {
-    name = "zhongshan";
-  } else if (zone === "中正區") {
-    name = "zhongzheng";
-  } else if (zone === "仁愛區") {
-    name = "renai";
-  } else if (zone === "安樂區") {
-    name = "anle";
-  } else if (zone === "信義區") {
-    name = "xinyi";
-  } else if (zone === "暖暖區") {
-    name = "nuannuan";
-  } else {
-    return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
-  }
+  const zoneName = {
+    七堵區: "qidu",
+    中山區: "zhongshan",
+    中正區: "zhongzheng",
+    仁愛區: "renai",
+    安樂區: "anle",
+    信義區: "xinyi",
+    暖暖區: "nuannuan",
+  };
+  const name = zoneName[zone];
 
   const [data, setData] = useState([]);
   useEffect(() => {
-    getData({ name }).then((resData) => {
+    if (!name) return;
+
+    getData(name).then((resData) => {
       setData(resData || []);
     });
-  }, []);
+  }, [name]);
+  if (!name)
+    return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
 
   return (
     <>
