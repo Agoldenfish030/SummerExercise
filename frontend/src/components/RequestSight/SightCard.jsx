@@ -72,7 +72,7 @@ export default function SightCard({ zone }) {
   useEffect(() => {
     if (!name) return;
 
-    getData(name).then((resData) => {
+    getData({ name }).then((resData) => {
       setData(resData || []);
     });
   }, [name]);
