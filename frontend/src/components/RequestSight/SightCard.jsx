@@ -82,7 +82,7 @@ export default function SightCard({ zone }) {
   return (
     <>
       {data.map((sight) => (
-        <SingleCard sight={sight} />
+        <SingleCard key={sight.sightName} sight={sight} />
       ))}
     </>
   );

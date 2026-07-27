@@ -28,6 +28,7 @@ function App() {
           "暖暖區",
         ].map((name) => (
           <SightButton
+            key={name}
             zone={name}
             setSelected={() => handleSelectedZones(name)}
           />
@@ -35,7 +36,7 @@ function App() {
       </div>
       <div className="grid w-full grid-cols-3 p-1 max-lg:grid-cols-1">
         {selectedSights.map((name) => (
-          <SightCard zone={name} />
+          <SightCard key={name} zone={name} />
         ))}
       </div>
     </>
