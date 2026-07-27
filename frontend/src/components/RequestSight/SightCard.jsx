@@ -64,13 +64,10 @@ export default async function SightCard({ zone }) {
   } else {
     return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
   }
-  const res = await fetch(
-    "https://summerexercise-production.up.railway.app/api/sights/" + name,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    },
-  );
+  const res = await fetch("/api/sights/" + name, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
   const data = await res.json();
 
   return (
