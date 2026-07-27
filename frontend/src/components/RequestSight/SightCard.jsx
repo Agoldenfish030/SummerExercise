@@ -1,5 +1,18 @@
 import { useState } from "react";
 
+async function getData({ name }) {
+  try {
+    const res = await fetch(
+      "https://backend-mavenmongodb-production.up.railway.app/api/sights" +
+        name,
+    );
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error: " + error);
+  }
+}
+
 function SingleCard({ sight }) {
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => {
@@ -64,11 +77,7 @@ export default async function SightCard({ zone }) {
   } else {
     return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
   }
-  const res = await fetch("/api/sights/" + name, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
-  const data = await res.json();
+  const data = await getData(name);
 
   return (
     <>

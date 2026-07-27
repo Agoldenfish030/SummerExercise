@@ -23,7 +23,10 @@ public class KeelungSightsCrawler {
 
     public KeelungSightsCrawler(){
         try{
-            Document webDoc = Jsoup.connect(SIGHTS_URL + "tourguide/taiwan/keelungcity/").get();
+            Document webDoc = Jsoup.connect(SIGHTS_URL + "tourguide/taiwan/keelungcity/")
+                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36")
+                    .timeout(5000)
+                    .get();
             sightsBox = webDoc.selectXpath(SIGHTS_BOX_X_PATH).first();
         }catch(IOException e){
             System.err.println("IOException in KeelungSightsCrawler constructor: " + e);
