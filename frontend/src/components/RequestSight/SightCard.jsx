@@ -1,26 +1,12 @@
 import { useEffect, useState } from "react";
 
-async function getData({ name }) {
-  try {
-    const res = await fetch("/api/sights/" + name);
-    if (!res.ok) {
-      console.error("mongodb資料獲取失敗。");
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Fetch error: " + error);
-    return [];
-  }
-}
-
 function SingleCard({ sight }) {
+  console.log("建立SingleCard：" + sight.sightName);
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => {
     setIsOpen(!isOpen);
   };
-  let haveImg = true;
-  if (sight.photoURL === "") haveImg = false;
+  const haveImg = Boolean(sight.photoURL && sight.photoURL !== "");
 
   return (
     <div className="p-2">
@@ -64,31 +50,9 @@ function SingleCard({ sight }) {
 }
 
 export default function SightCard({ zone }) {
-  const zoneName = {
-    七堵區: "qidu",
-    中山區: "zhongshan",
-    中正區: "zhongzheng",
-    仁愛區: "renai",
-    安樂區: "anle",
-    信義區: "xinyi",
-    暖暖區: "nuannuan",
-  };
-  const name = zoneName[zone];
-
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    if (!name) return;
-
-    getData({ name }).then((resData) => {
-      setData(resData || []);
-    });
-  }, [name]);
-  if (!name)
-    return <p className="text-2xl font-bold text-orange-600">顯示錯誤！</p>;
-
   return (
     <>
-      {data.map((sight) => (
+      {zone.map((sight) => (
         <SingleCard key={sight.sightName} sight={sight} />
       ))}
     </>
