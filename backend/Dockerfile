@@ -4,8 +4,7 @@ COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package -DskipTests
 
 FROM amazoncorretto:17-jdk
-ARG RAILWAY_GIT_COMMIT_SHA
-RUN echo "Building commit: ${RAILWAY_GIT_COMMIT_SHA}"
+ENV NO_CACHE=1
 COPY --from=build /home/app/target/backend-0.0.1-SNAPSHOT.jar /usr/local/lib/demo.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/usr/local/lib/demo.jar"]
