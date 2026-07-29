@@ -1,7 +1,7 @@
 FROM maven:4.0.0-rc-4-amazoncorretto AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package -DskipTests ARG GIT_SHA
+RUN mvn -f /home/app/pom.xml clean package -DskipTests
 
 FROM amazoncorretto:17-jdk
 ARG RAILWAY_GIT_COMMIT_SHA
