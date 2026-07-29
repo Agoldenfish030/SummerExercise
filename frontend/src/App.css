@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@layer base {
+  body {
+    font-family:
+      Gill Sans,
+      "LXGW WenKai TC",
+      "Times",
+      sans-serif;
+  }
+}

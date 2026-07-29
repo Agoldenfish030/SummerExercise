@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 function SingleCard({ sight }) {
-  console.log("建立SingleCard：" + sight.sightName);
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => {
     setIsOpen(!isOpen);
@@ -16,8 +15,7 @@ function SingleCard({ sight }) {
             {sight.sightName}
             <br />
           </p>
-          <p className="text-lg">
-            <br />
+          <p className="pt-1 text-lg">
             分類：{sight.category}
             <br />
             地區：{sight.zone}

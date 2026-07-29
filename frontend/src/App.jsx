@@ -6,7 +6,6 @@ import SightCard from "./components/RequestSight/SightCard";
 
 async function getData(name) {
   try {
-    console.log("準備進行取資：" + name);
     const res = await fetch("/api/sights/" + name);
     if (!res.ok) {
       console.error("mongodb資料獲取失敗。");
@@ -40,6 +39,7 @@ function App() {
   };
   const [sightsList, setSightsList] = useState({});
   const [selectedSights, setSelectedSights] = useState([]);
+  const [loading, setLoading] = useState(true);
   const handleSelectedZones = (zone) => {
     if (selectedSights.includes(zone)) {
       setSelectedSights(selectedSights.filter((sight) => sight !== zone));
@@ -57,6 +57,7 @@ function App() {
       });
       Promise.all(promises).then((cardsList) => {
         setSightsList(Object.fromEntries(cardsList));
+        setLoading(false);
       });
     };
 
@@ -65,6 +66,18 @@ function App() {
 
   return (
     <>
+      <div
+        className={`absolute z-40 h-full w-full bg-gray-400 opacity-50 ${
+          loading ? "visible" : "invisible"
+        }`}
+      ></div>
+      <div
+        className={`${loading ? "visible" : "invisible"} relative z-50 h-full w-full`}
+      >
+        <div className="absolute top-52 z-50 w-full">
+          <p className="text-center text-5xl">Loading...</p>
+        </div>
+      </div>
       <div className="grid w-full grid-cols-7 border-0 border-b border-gray-300 max-lg:grid-cols-1">
         {zoneList.map((name) => (
           <SightButton
