@@ -47,11 +47,23 @@ function SingleCard({ sight }) {
   );
 }
 
-export default function SightCard({ zone }) {
+export default function SightCards({ sights }) {
+  if (!sights || sights.length === 0) return;
+
+  const columns = [[], [], []];
+  sights.forEach((sight, index) => {
+    columns[index % 3].push(sight);
+  });
+  console.log(columns);
+
   return (
     <>
-      {zone.map((sight) => (
-        <SingleCard key={sight.sightName} sight={sight} />
+      {columns.map((colSights, colIndex) => (
+        <div key={colIndex} className="flex flex-col">
+          {colSights.map((sight) => (
+            <SingleCard key={sight.sightName} sight={sight} />
+          ))}
+        </div>
       ))}
     </>
   );

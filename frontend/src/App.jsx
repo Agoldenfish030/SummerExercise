@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 import SightButton from "./components/RequestSight/SightButton";
-import SightCard from "./components/RequestSight/SightCard";
+import SightCards from "./components/RequestSight/SightCards";
 
 async function getData(name) {
   try {
@@ -28,30 +28,29 @@ function App() {
     "信義區",
     "暖暖區",
   ];
-  const zoneNameToEng = {
-    七堵區: "qidu",
-    中山區: "zhongshan",
-    中正區: "zhongzheng",
-    仁愛區: "renai",
-    安樂區: "anle",
-    信義區: "xinyi",
-    暖暖區: "nuannuan",
-  };
+  const zoneNameToEng = [
+    ["七堵區", "qidu"],
+    ["中山區", "zhongshan"],
+    ["中正區", "zhongzheng"],
+    ["仁愛區", "renai"],
+    ["安樂區", "anle"],
+    ["信義區", "xinyi"],
+    ["暖暖區", "nuannuan"],
+  ];
   const [sightsList, setSightsList] = useState({});
-  const [selectedSights, setSelectedSights] = useState([]);
+  const [selectedZones, setSelectedZones] = useState([]);
   const [loading, setLoading] = useState(true);
   const handleSelectedZones = (zone) => {
-    if (selectedSights.includes(zone)) {
-      setSelectedSights(selectedSights.filter((sight) => sight !== zone));
+    if (selectedZones.includes(zone)) {
+      setSelectedZones(selectedZones.filter((sight) => sight !== zone));
     } else {
-      setSelectedSights([...selectedSights, zone]);
+      setSelectedZones([...selectedZones, zone]);
     }
   };
 
   useEffect(() => {
     const fetchAllSights = async () => {
-      const entries = Object.entries(zoneNameToEng);
-      const promises = entries.map(async ([zhZone, engZone]) => {
+      const promises = zoneNameToEng.map(async ([zhZone, engZone]) => {
         const data = await getData(engZone);
         return [zhZone, data];
       });
@@ -63,6 +62,8 @@ function App() {
 
     fetchAllSights();
   }, []);
+
+  const allSelectedSights = selectedZones.flatMap((zone) => sightsList[zone]);
 
   return (
     <>
@@ -87,10 +88,8 @@ function App() {
           />
         ))}
       </div>
-      <div className="grid w-full grid-cols-3 p-1 max-lg:grid-cols-1">
-        {selectedSights.map((name) => (
-          <SightCard key={name} zone={sightsList[name]} />
-        ))}
+      <div className="grid w-full grid-cols-3 max-lg:grid-cols-1">
+        <SightCards key="cards" sights={allSelectedSights} />
       </div>
     </>
   );
