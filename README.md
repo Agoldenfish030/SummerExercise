@@ -82,6 +82,7 @@ SummerExercise/
 4. 設定Variables（環境變數），並在Setting欄位更改：
    * Source的Root Directory改成/backend
    * Build的Builder改為Dockerfile，並設定Dockerfile路徑：/backend/Dockerfile
+5. 在Networking欄位部署公開網頁。
 ## 測試方式
 * **爬蟲測試：**
 可運行/backend/src/test/java/com/exercise/backend/crawler/TestKeelungSightsCrawler.java進行爬蟲測試。
