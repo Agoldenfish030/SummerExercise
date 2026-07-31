@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function SingleCard({ sight }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +54,6 @@ export default function SightCards({ sights }) {
   sights.forEach((sight, index) => {
     columns[index % 3].push(sight);
   });
-  console.log(columns);
 
   return (
     <>
