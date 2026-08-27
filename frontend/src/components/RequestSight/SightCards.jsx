@@ -2,8 +2,13 @@ import { useState } from "react";
 
 function SingleCard({ sight }) {
   const [isOpen, setIsOpen] = useState(false);
-  const handleOpen = () => {
+  const handleData = () => {
     setIsOpen(!isOpen);
+  };
+  const handleAddr = (sightName) => {
+    const query = encodeURIComponent(`基隆市 ${sightName}`);
+    const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    window.open(url, "_blank");
   };
   const haveImg = Boolean(sight.photoURL && sight.photoURL !== "");
 
@@ -22,12 +27,20 @@ function SingleCard({ sight }) {
             <br />
             <br />
           </p>
-          <button
-            className="rounded border border-blue-500 bg-white p-1 text-2xl text-blue-500 hover:bg-blue-500 hover:text-white"
-            onClick={handleOpen}
-          >
-            詳細資訊
-          </button>
+          <div className="flex flex-row space-x-1">
+            <button
+              className="rounded border border-blue-500 bg-white p-1 text-2xl text-blue-500 hover:bg-blue-500 hover:text-white"
+              onClick={() => handleAddr(sight.sightName)}
+            >
+              地址
+            </button>
+            <button
+              className="rounded border border-blue-500 bg-white p-1 text-2xl text-blue-500 hover:bg-blue-500 hover:text-white"
+              onClick={handleData}
+            >
+              詳細資訊
+            </button>
+          </div>
           <div
             className={`grid pt-2 transition-all duration-400 ease-in-out ${
               isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
