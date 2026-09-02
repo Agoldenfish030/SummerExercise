@@ -10,6 +10,7 @@ public class Sight {
     private String photoURL;
     private String address;
     private String description;
+    private String fallbackPhoto;
 
     public String getSightName() {
         return sightName;
@@ -59,6 +60,14 @@ public class Sight {
         this.description = description;
     }
 
+    public String getFallbackPhoto(){
+        return fallbackPhoto;
+    }
+
+    public void setFallbackPhoto(String fallbackPhoto){
+        this.fallbackPhoto = fallbackPhoto;
+    }
+
     @Override
     public String toString(){
         return String.format("SightName: %s\n" +
@@ -66,6 +75,7 @@ public class Sight {
                 "Category: %s\n" +
                 "PhotoURL: %s\n" +
                 "Description: %s\n" +
-                "Address: %s\n" ,sightName, zone, category, photoURL, description, address);
+                "Address: %s\n" +
+                "FallbackPhoto: %s\n", sightName, zone, category, photoURL, description, address, fallbackPhoto);
     }
 }

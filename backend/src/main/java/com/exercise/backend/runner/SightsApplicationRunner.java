@@ -31,5 +31,8 @@ public class SightsApplicationRunner implements ApplicationRunner {
             }
         }
         System.out.println("Already crawled.");
+        System.out.println();
+        System.out.println("Start updating photos...");
+        service.updateAllFPsOfSights();
     }
 }
