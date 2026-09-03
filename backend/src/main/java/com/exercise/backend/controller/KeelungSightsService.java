@@ -44,6 +44,7 @@ public class KeelungSightsService {
             if (Objects.equals(zone, zoneEnglish)) {
                 sights = repository.findByZone(ZoneConstant.KEELUNG_ZONES_CHINESE[z]);
                 for (Sight sight : sights) {
+                    System.out.println("Update "+sight.getSightName()+" ...");
                     try {
                         String fallbackPhoto = WIKI_SEARCH.searchPhotosByKeyword(sight.getSightName());
                         Query query = new Query(Criteria.where("sightName").is(sight.getSightName()));
@@ -52,6 +53,7 @@ public class KeelungSightsService {
                         /*
                         * 原本的話用repository.save(entity)就好，但是沒有設定@Id的緣故，
                         * 沒辦法正確覆蓋，就只能用mongoTemplate應付一下了。*/
+                        Thread.sleep(3000);
                     } catch (Exception e) {
                         System.err.println("updateFPsOfSights Exception:");
                         System.err.println(e);
@@ -68,11 +70,13 @@ public class KeelungSightsService {
         for (int z = 0; z < ZoneConstant.KEELUNG_ZONES_CHINESE.length; z++) {
             List<Sight> sights = repository.findByZone(ZoneConstant.KEELUNG_ZONES_CHINESE[z]);
             for (Sight sight : sights) {
+                System.out.println("Update "+sight.getSightName()+" ...");
                 try {
                     String fallbackPhoto = WIKI_SEARCH.searchPhotosByKeyword(sight.getSightName());
                     Query query = new Query(Criteria.where("sightName").is(sight.getSightName()));
                     Update update = new Update().set("fallbackPhoto", fallbackPhoto);
                     mongoTemplate.updateFirst(query, update, Sight.class);
+                    Thread.sleep(3000);
                 } catch (Exception e) {
                     System.err.println("updateFPsOfSights Exception:");
                     System.err.println(e);
