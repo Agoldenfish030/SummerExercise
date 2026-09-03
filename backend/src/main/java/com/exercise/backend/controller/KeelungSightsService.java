@@ -38,7 +38,7 @@ public class KeelungSightsService {
 
     // update fallback photos of sights
     // tester
-    public List<Sight> updateFPsOfSights(String zone) throws IOException, InterruptedException {
+    public List<Sight> updateFPsOfSights(String zone) {
         List<Sight> sights;
         for (int z = 0; z < ZoneConstant.KEELUNG_ZONES_ENGLISH.length; z++) {
             String zoneEnglish = ZoneConstant.KEELUNG_ZONES_ENGLISH[z];
@@ -54,15 +54,16 @@ public class KeelungSightsService {
                         /*
                         * 原本的話用repository.save(entity)就好，但是沒有設定@Id的緣故，
                         * 沒辦法正確覆蓋，就只能用mongoTemplate應付一下了。*/
-                        Thread.sleep(3000);
                     } catch (InterruptedException | IOException e) {
                         System.err.println("updateFPsOfSights InterruptedException | IOException:");
                         System.err.println(e);
-                        Thread.sleep(3000);
-                        throw e;
-                    } catch (Exception e) {
-                        System.err.println("updateFPsOfSights Exception:");
-                        System.err.println(e);
+                    } finally {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            System.err.println("updateFPsOfSights Exception:");
+                            System.err.println(e);
+                        }
                     }
                 }
                 break;
