@@ -1,16 +1,25 @@
 import { useState } from "react";
 
 function SingleCard({ sight }) {
+  const [photoUrl, setPhotoUrl] = useState(sight.photoURL);
   const [isOpen, setIsOpen] = useState(false);
   const handleData = () => {
     setIsOpen(!isOpen);
+  };
+  const handleMissing = () => {
+    setPhotoUrl(sight.fallbackPhoto);
   };
   const handleAddr = (sightName) => {
     const query = encodeURIComponent(`基隆市 ${sightName}`);
     const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
     window.open(url, "_blank");
   };
-  const haveImg = Boolean(sight.photoURL && sight.photoURL !== "");
+  const haveImg = Boolean(
+    sight.photoURL &&
+    sight.photoURL !== "" &&
+    sight.fallbackPhoto &&
+    sight.fallbackPhoto !== "",
+  );
 
   return (
     <div className="p-2">
@@ -47,7 +56,13 @@ function SingleCard({ sight }) {
             }`}
           >
             <div className="overflow-hidden">
-              {haveImg && <img src={sight.photoURL} alt="該區景點照片" />}
+              {haveImg && (
+                <img
+                  src={photoUrl}
+                  alt="該區景點照片"
+                  onError={handleMissing}
+                />
+              )}
               <p className="text-lg">
                 {sight.description}
                 <br />
