@@ -48,23 +48,37 @@ public class WikiSearch {
                 .header("User-Agent", USER_AGENT)
                 .GET().build();
         HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("response code: "+response.statusCode());
 
-        JsonNode rootNode = OBJECT_MAPPER.readTree(response.body());
-        JsonNode pagesNode = rootNode.path("query").path("pages");
-        if (pagesNode.isMissingNode()) {
-            return resData;
-        }
+        if(response.statusCode() == 200){
+            JsonNode rootNode = OBJECT_MAPPER.readTree(response.body());
+            JsonNode pagesNode = rootNode.path("query").path("pages");
+            if (pagesNode.isMissingNode()) {
+                return resData;
+            }
 
-        int nameCount = 0;
-        for (JsonNode page : pagesNode) {
-            JsonNode imageInfoArray = page.path("imageinfo");
-            if (imageInfoArray.isArray() && !imageInfoArray.isEmpty()) {
-                JsonNode firstInfo = imageInfoArray.get(0);
-                for(String propertyName : propertyNames){
-                    resData.add(nameCount, firstInfo.path(propertyName).asText());
-                    nameCount++;
+            int nameCount = 0;
+            for (JsonNode page : pagesNode) {
+                JsonNode imageInfoArray = page.path("imageinfo");
+                if (imageInfoArray.isArray() && !imageInfoArray.isEmpty()) {
+                    JsonNode firstInfo = imageInfoArray.get(0);
+                    for(String propertyName : propertyNames){
+                        resData.add(nameCount, firstInfo.path(propertyName).asText());
+                        nameCount++;
+                    }
                 }
             }
+        } else if (response.statusCode() == 429) {
+            while (response.statusCode() == 429) {
+                String retryAfter = response.headers().firstValue("Retry-After").orElse("60");
+                long waitSeconds = Long.parseLong(retryAfter);
+                System.err.println("Response status code is 429. Retry after " + waitSeconds + "s ...");
+                Thread.sleep(waitSeconds * 1000);
+                response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println("response code: "+response.statusCode());
+            }
+        } else {
+            System.err.println("Response status code is "+response.statusCode()+". Skip this updating.");
         }
         return resData;
     }
