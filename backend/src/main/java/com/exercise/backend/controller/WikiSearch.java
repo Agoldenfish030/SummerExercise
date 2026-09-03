@@ -3,7 +3,6 @@ package com.exercise.backend.controller;
 import org.springframework.beans.factory.annotation.Value;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;

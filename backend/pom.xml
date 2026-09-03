@@ -29,8 +29,6 @@
 	<properties>
 		<java.version>17</java.version>
 		<jsoup.version>1.22.2</jsoup.version>
-		<data.mongodb.version>4.0.7</data.mongodb.version>
-		<jackson.version>3.2.1</jackson.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,12 +51,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-			<version>${data.mongodb.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>tools.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
 
