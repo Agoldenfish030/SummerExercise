@@ -1,7 +1,7 @@
 FROM maven:4.0.0-rc-4-amazoncorretto AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package -DskipTests
+RUN -Dmaven.wagon.http.retryHandler.count=5 -Dmaven.wagon.http.timeout=120000 mvn -f /home/app/pom.xml clean package -DskipTests
 
 FROM amazoncorretto:17-jdk
 ENV NO_CACHE=1
