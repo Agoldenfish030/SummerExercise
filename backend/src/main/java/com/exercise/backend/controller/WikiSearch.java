@@ -9,6 +9,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WikiSearch {
     private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
@@ -30,31 +32,38 @@ public class WikiSearch {
                         "&format=json",
                 encodedName
         );
+        List<String> propertyNames = new ArrayList<>();
+        propertyNames.add("url");
+        return fetchAndParse(url, propertyNames).get(0);
+    }
+
+    private List<String> fetchAndParse(String url, List<String> propertyNames) throws Exception{
+        List<String> resData = new ArrayList<>();
+        resData.add("");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("User-Agent", USER_AGENT)
                 .GET().build();
         HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+
         JsonNode rootNode = OBJECT_MAPPER.readTree(response.body());
         JsonNode pagesNode = rootNode.path("query").path("pages");
         if (pagesNode.isMissingNode()) {
-            return "";
+            return resData;
         }
 
-        String imageUrl = "";
+        int nameCount = 0;
         for (JsonNode page : pagesNode) {
-            String title = page.path("title").asText();
-            System.out.println(sightName+": ");
-            System.out.print("title->"+title);
             JsonNode imageInfoArray = page.path("imageinfo");
             if (imageInfoArray.isArray() && !imageInfoArray.isEmpty()) {
                 JsonNode firstInfo = imageInfoArray.get(0);
-                imageUrl = firstInfo.path("url").asText();
-                System.out.print(String.format(" imageUrl->%s", imageUrl));
+                for(String propertyName : propertyNames){
+                    resData.add(nameCount, firstInfo.path(propertyName).asText());
+                    nameCount++;
+                }
             }
-            System.out.println();
         }
-        return imageUrl;
+        return resData;
     }
 }

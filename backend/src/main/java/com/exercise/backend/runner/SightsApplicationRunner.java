@@ -34,5 +34,6 @@ public class SightsApplicationRunner implements ApplicationRunner {
         System.out.println();
         System.out.println("Start updating photos...");
         service.updateAllFPsOfSights();
+        System.out.println("Updating photos ends.");
     }
 }
