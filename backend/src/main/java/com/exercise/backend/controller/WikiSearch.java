@@ -3,6 +3,8 @@ package com.exercise.backend.controller;
 import org.springframework.beans.factory.annotation.Value;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -19,7 +21,7 @@ public class WikiSearch {
     private static String authorEmail;
     private static final String USER_AGENT = "KeelungSightsWebsite/1.0 ("+authorEmail+")";
 
-    public String searchPhotosByKeyword(String sightName) throws Exception {
+    public String searchPhotosByKeyword(String sightName) throws InterruptedException, IOException {
         String encodedName = URLEncoder.encode(sightName, StandardCharsets.UTF_8);
         String url = String.format(
                 "https://commons.wikimedia.org/w/api.php?action=query" +
@@ -37,7 +39,7 @@ public class WikiSearch {
         return fetchAndParse(url, propertyNames).get(0);
     }
 
-    private List<String> fetchAndParse(String url, List<String> propertyNames) throws Exception{
+    private List<String> fetchAndParse(String url, List<String> propertyNames) throws InterruptedException, IOException {
         List<String> resData = new ArrayList<>();
         resData.add("");
 
