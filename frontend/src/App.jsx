@@ -67,6 +67,7 @@ function App() {
 
   return (
     <>
+      // loading page
       <div
         className={`absolute z-40 h-full w-full bg-gray-400 opacity-50 ${
           loading ? "visible" : "invisible"
@@ -79,6 +80,7 @@ function App() {
           <p className="text-center text-5xl">Loading...</p>
         </div>
       </div>
+      // main page
       <div className="grid w-full grid-cols-7 border-0 border-b border-gray-300 max-lg:grid-cols-1">
         {zoneList.map((name) => (
           <SightButton

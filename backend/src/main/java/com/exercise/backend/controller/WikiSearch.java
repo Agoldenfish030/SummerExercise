@@ -12,13 +12,17 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class WikiSearch {
     private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    @Value("AUTHOR_EMAIL")
-    private static String authorEmail;
-    private static final String USER_AGENT = "KeelungSightsWebsite/1.0 ("+authorEmail+")";
+    @Value("${authorEmail}")
+    private String authorEmail;
+
+    private String getUserAgent() {
+        return "KeelungSightsWebsite/1.0 (" + authorEmail + ")";
+    }
 
     public String searchPhotosByKeyword(String sightName) throws InterruptedException, IOException {
         String encodedName = URLEncoder.encode(sightName, StandardCharsets.UTF_8);
@@ -27,28 +31,37 @@ public class WikiSearch {
                         "&generator=search" +
                         "&gsrsearch=%s" +
                         "&gsrnamespace=6" +
-                        "&gsrlimit=1" +
+                        "&gsrlimit=5" +
                         "&prop=imageinfo" +
                         "&iiprop=url" +
-                        "&format=json",
+                        "&format=json" +
+                        "&formatversion=2",
                 encodedName
         );
         List<String> propertyNames = new ArrayList<>();
         propertyNames.add("url");
-        return fetchAndParse(url, propertyNames).get(0);
+        List<String> photos = fetchAndParse(url, propertyNames);
+        if(photos.isEmpty()) return "";
+        return photos.get(0);
     }
 
     private List<String> fetchAndParse(String url, List<String> propertyNames) throws InterruptedException, IOException {
         List<String> resData = new ArrayList<>();
-        resData.add("");
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("User-Agent", USER_AGENT)
+                .header("User-Agent", getUserAgent())
                 .GET().build();
         HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println("response code: "+response.statusCode());
 
+        while (response.statusCode() == 429) {
+            String retryAfter = response.headers().firstValue("Retry-After").orElse("60");
+            long waitSeconds = Long.parseLong(retryAfter);
+            System.err.println("Response status code is 429. Retry after " + waitSeconds + "s ...");
+            Thread.sleep(waitSeconds * 1000);
+            response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("response code: "+response.statusCode());
+        }
         if(response.statusCode() == 200){
             JsonNode rootNode = OBJECT_MAPPER.readTree(response.body());
             JsonNode pagesNode = rootNode.path("query").path("pages");
@@ -56,25 +69,22 @@ public class WikiSearch {
                 return resData;
             }
 
-            int nameCount = 0;
             for (JsonNode page : pagesNode) {
                 JsonNode imageInfoArray = page.path("imageinfo");
                 if (imageInfoArray.isArray() && !imageInfoArray.isEmpty()) {
                     JsonNode firstInfo = imageInfoArray.get(0);
                     for(String propertyName : propertyNames){
-                        resData.add(nameCount, firstInfo.path(propertyName).asText());
-                        nameCount++;
+                        String value = firstInfo.path(propertyName).asText();
+                        if(value != null &&
+                                !value.isBlank() &&
+                                (value.toLowerCase().contains(".jpg") ||
+                                        value.toLowerCase().contains(".png") ||
+                                        value.toLowerCase().contains(".jpeg"))){
+                            resData.add(value);
+                            break;
+                        }
                     }
                 }
-            }
-        } else if (response.statusCode() == 429) {
-            while (response.statusCode() == 429) {
-                String retryAfter = response.headers().firstValue("Retry-After").orElse("60");
-                long waitSeconds = Long.parseLong(retryAfter);
-                System.err.println("Response status code is 429. Retry after " + waitSeconds + "s ...");
-                Thread.sleep(waitSeconds * 1000);
-                response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-                System.out.println("response code: "+response.statusCode());
             }
         } else {
             System.err.println("Response status code is "+response.statusCode()+". Skip this updating.");
