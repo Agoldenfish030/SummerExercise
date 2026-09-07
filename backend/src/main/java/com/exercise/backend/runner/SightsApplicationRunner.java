@@ -32,6 +32,7 @@ public class SightsApplicationRunner implements ApplicationRunner {
         }
         System.out.println("Already crawled.");
         System.out.println();
+        // 透過wikimedia api進行圖片補強
         System.out.println("Start updating photos...");
         service.updateAllFPsOfSights();
         System.out.println("Updating photos ends.");

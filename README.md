@@ -4,6 +4,8 @@
 此專案架構為前端與後端並存的Monorepo（單一儲存庫），是一個介面簡單的基隆景點導覽網頁，可按下七個基隆地區的按鈕快速瞭解基隆景點。
 * **自動爬蟲並於mongoDB預存資料：** 
 透過爬取[TravelKing旅遊王的基隆景點地圖](https://www.travelking.com.tw/tourguide/taiwan/keelungcity/)，將所需的資訊預存於指定的mongoDB Atlas，每次開啟網頁便不需等待冗長的爬蟲時間。
+* **自wikimedia額外儲存備用圖片：**
+透過向wikimedia提出請求，以防TravelKing提供的圖片失去作用。
 * **一鍵瞭解基隆地區景點：**
 點擊地區按鈕，下方將會顯示該區的特色景點卡牌，可再點擊卡牌下方按鈕瞭解詳細資訊。
 ## 架構概覽
@@ -22,7 +24,8 @@ SummerExercise/
 │  │  │  │           ├──controller/
 │  │  │  │           │  ├──KeelungSightsRepository.java
 │  │  │  │           │  ├──KeelungSightsService.java
-│  │  │  │           │  └──SightController.java
+│  │  │  │           │  ├──SightController.java
+│  │  │  │           │  └──WikiSearch.java
 │  │  │  │           ├──crawler/
 │  │  │  │           │  ├──KeelungSightsCrawler.java
 │  │  │  │           │  └──Sight.java
@@ -34,8 +37,8 @@ SummerExercise/
 │  │  │  └──resources/
 │  │  │     ├──static/
 │  │  │     │  ├──assets/
-│  │  │     │  │  ├──index-7NA-iUKR.css
-│  │  │     │  │  └──index-P924cIHq.js
+│  │  │     │  │  ├──index-C4fa0bpS.js
+│  │  │     │  │  └──index-CsxIB_qx.css
 │  │  │     │  ├──favicon.svg
 │  │  │     │  └──index.html
 │  │  │     └──application.properties
@@ -152,5 +155,5 @@ SummerExercise/
 https://backend-mavenmongodb-production.up.railway.app/
 
 ## 已知限制
-* 爬蟲目標網站更新內容時，雲端資料庫並不會即時更新，需要在railway重新Deploy才可更新。
+* 爬蟲目標網站更新內容時，雲端資料庫並不會即時更新，需要在railway重新Deploy才可更新，更新備用圖片亦然。
 * 必須有github、mongoDB、railway帳號，若要進行爬蟲測試與API測試，則各自需要下載IDE和Postman。

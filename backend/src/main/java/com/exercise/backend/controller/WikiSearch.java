@@ -60,7 +60,7 @@ public class WikiSearch {
             System.err.println("Response status code is 429. Retry after " + waitSeconds + "s ...");
             Thread.sleep(waitSeconds * 1000);
             response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("response code: "+response.statusCode());
+            System.out.println("response code after retry: "+response.statusCode());
         }
         if(response.statusCode() == 200){
             JsonNode rootNode = OBJECT_MAPPER.readTree(response.body());
